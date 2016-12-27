@@ -61,8 +61,8 @@ namespace typestate {
       public addTransitions(fcn: Transitions<T>) {
          fcn.fromStates.forEach(from => {
             fcn.toStates.forEach(to => {
-               // self transitions are invalid and don't add duplicates
-               if (from !== to && !this._validTransition(from, to)) {
+               // don't add duplicates
+               if (!this._validTransition(from, to)) {
                   this._transitionFunctions.push(new TransitionFunction<T>(this, from, to));
                }
             });
@@ -150,7 +150,7 @@ namespace typestate {
        * Check whether a transition to a new state is valid
        */
       public canGo(state: T): boolean {
-         return this.currentState === state || this._validTransition(this.currentState, state);
+         return this._validTransition(this.currentState, state);
       }
 
       /**
